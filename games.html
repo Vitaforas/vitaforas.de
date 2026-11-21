@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🫧</title>
+  <meta name="description" content="Vitaforas – Browser-Games: PacMan, Neon, Neo Vegas, Browser Bros.">
+
+  <style>
+    :root{
+      --accent:  #6ee7ff;
+      --accent2: #a78bfa;
+    }
+
+    *{ box-sizing: border-box; }
+
+    html, body{ min-height: 100%; }
+
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #e8edff;
+      background:
+        radial-gradient(1200px 800px at 15% -10%, #1b2455 0%, transparent 60%),
+        radial-gradient(1000px 700px at 90% 110%, #2a1750 0%, transparent 60%),
+        linear-gradient(160deg, #0b1020, #141a35);
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      padding: 40px 18px 70px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- Hintergrund-Bubbles ---------- */
+    .bubbles{
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bubbles span{
+      position: absolute;
+      bottom: -160px;
+      left: var(--left);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%,
+                  rgba(255,255,255,.85),
+                  rgba(110,231,255,.25) 55%,
+                  rgba(110,231,255,0) 72%);
+      box-shadow: inset 0 0 18px rgba(255,255,255,.15);
+      opacity: 0;
+      animation: rise var(--dur) linear var(--delay) infinite;
+    }
+
+    @keyframes rise{
+      0%   { transform: translate3d(0, 0, 0);        opacity: 0; }
+      10%  {                                          opacity: .75; }
+      90%  {                                          opacity: .35; }
+      100% { transform: translate3d(var(--drift), -115vh, 0); opacity: 0; }
+    }
+
+    .bubbles span:nth-child(1)  { --left: 4%;  --size: 22px; --dur: 17s; --delay: 0s;   --drift: 30px; }
+    .bubbles span:nth-child(2)  { --left: 14%; --size: 40px; --dur: 23s; --delay: 2.5s; --drift: -40px; }
+    .bubbles span:nth-child(3)  { --left: 24%; --size: 16px; --dur: 14s; --delay: 5s;   --drift: 20px; }
+    .bubbles span:nth-child(4)  { --left: 33%; --size: 32px; --dur: 20s; --delay: 1s;   --drift: 50px; }
+    .bubbles span:nth-child(5)  { --left: 44%; --size: 24px; --dur: 26s; --delay: 4s;   --drift: -30px; }
+    .bubbles span:nth-child(6)  { --left: 52%; --size: 48px; --dur: 29s; --delay: 7s;   --drift: 35px; }
+    .bubbles span:nth-child(7)  { --left: 61%; --size: 18px; --dur: 15s; --delay: 3s;   --drift: -25px; }
+    .bubbles span:nth-child(8)  { --left: 69%; --size: 36px; --dur: 22s; --delay: 6s;   --drift: 45px; }
+    .bubbles span:nth-child(9)  { --left: 77%; --size: 20px; --dur: 18s; --delay: 8s;   --drift: -35px; }
+    .bubbles span:nth-child(10) { --left: 85%; --size: 44px; --dur: 25s; --delay: 2s;   --drift: 25px; }
+    .bubbles span:nth-child(11) { --left: 92%; --size: 26px; --dur: 19s; --delay: 9s;   --drift: -45px; }
+    .bubbles span:nth-child(12) { --left: 97%; --size: 14px; --dur: 13s; --delay: 5.5s; --drift: 15px; }
+
+    /* ---------- Layout ---------- */
+    .wrap{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .banner{
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 30px 70px -30px rgba(0,0,0,.9),
+                  0 0 0 1px rgba(110,231,255,.08);
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .banner:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 40px 90px -30px rgba(0,0,0,.95),
+                  0 0 60px -10px rgba(110,231,255,.35);
+    }
+
+    .tagline{
+      margin: 34px 0 0;
+      font-size: .82rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(232,237,255,.55);
+    }
+
+    /* ---------- Spiele-Grid ---------- */
+    .games{
+      width: 100%;
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 18px;
+    }
+
+    .game{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 16px;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 20px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .25s ease, box-shadow .25s ease,
+                  border-color .25s ease, background .25s ease;
+    }
+    .game:hover,
+    .game:focus-visible{
+      transform: translateY(-6px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(110,231,255,.45);
+      box-shadow: 0 22px 45px -18px rgba(110,231,255,.55);
+      outline: none;
+    }
+
+    .game img{
+      height: 80px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.45));
+      transition: transform .25s ease;
+    }
+    .game:hover img{ transform: scale(1.06); }
+
+    .game .label{
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: .03em;
+      color: rgba(232,237,255,.85);
+    }
+
+    /* ---------- Footer ---------- */
+    .foot{
+      margin-top: 46px;
+      font-size: .78rem;
+      color: rgba(232,237,255,.35);
+      letter-spacing: .08em;
+    }
+
+    /* ---------- Kleinigkeiten ---------- */
+    @media (max-width: 480px){
+      body{ padding: 22px 14px 50px; }
+      .banner{ border-radius: 16px; }
+      .games{ gap: 14px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+      .game img{ height: 64px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .bubbles span{ animation: none; opacity: .25; }
+      *{ transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- animierte Hintergrund-Bubbles -->
+  <div class="bubbles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <main class="wrap">
+
+    <img src="Game.png" alt="Vitaforas Games" class="banner">
+
+    <p class="tagline">Wähle ein Spiel</p>
+
+    <section class="games">
+
+      <a href="https://pacman.vitaforas.de" target="_blank" rel="noopener" class="game">
+        <img src="Pacman.jpg" alt="PacMan">
+        <span class="label">PacMan</span>
+      </a>
+
+      <a href="https://neon.vitaforas.de" target="_blank" rel="noopener" class="game">
+        <img src="Neon.jpg" alt="Neon">
+        <span class="label">Neon</span>
+      </a>
+
+      <a href="https://vegas.vitaforas.de" target="_blank" rel="noopener" class="game">
+        <img src="Gta.jpg" alt="Neo Vegas">
+        <span class="label">Neo Vegas</span>
+      </a>
+
+      <a href="https://bros.vitaforas.de" target="_blank" rel="noopener" class="game">
+        <img src="Bros.jpg" alt="Browser Bros.">
+        <span class="label">Browser Bros.</span>
+      </a>
+
+    </section>
+
+    <p class="foot">© Vitaforas</p>
+
+  </main>
+
+</body>
+</html>
